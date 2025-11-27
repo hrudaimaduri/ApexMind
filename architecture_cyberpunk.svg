@@ -1,0 +1,94 @@
+<svg width="1000" height="760" viewBox="0 0 1000 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <linearGradient id="neonGradient" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#A053FF"/>
+    <stop offset="50%" stop-color="#7F5AF0"/>
+    <stop offset="100%" stop-color="#00E5FF"/>
+  </linearGradient>
+
+  <style>
+    .box {
+      fill: rgba(255,255,255,0.05);
+      stroke: url(#neonGradient);
+      stroke-width: 3;
+      rx: 14;
+      ry: 14;
+    }
+    .text {
+      fill: #D0CFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .title {
+      fill: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .arrow {
+      stroke: url(#neonGradient);
+      stroke-width: 3;
+      marker-end: url(#arrowHead);
+    }
+  </style>
+
+  <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+    <polygon points="0 0, 6 3, 0 6" fill="#7F5AF0"/>
+  </marker>
+</defs>
+
+
+<!-- TITLE -->
+<text x="500" y="60" class="title" text-anchor="middle">ApexMind — Neon Cyberpunk Architecture</text>
+
+
+
+<!-- USER BOX -->
+<rect x="400" y="100" width="200" height="80" class="box"/>
+<text x="500" y="148" class="text" text-anchor="middle">User Input</text>
+
+
+<!-- RAG BOX -->
+<rect x="350" y="220" width="300" height="120" class="box"/>
+<text x="500" y="260" class="title" text-anchor="middle" font-size="22">RAG Retrieval</text>
+<text x="500" y="300" class="text" text-anchor="middle">FAISS + Embeddings + KB Chunks</text>
+
+
+<!-- AGENT LLM BOX -->
+<rect x="330" y="380" width="340" height="120" class="box"/>
+<text x="500" y="420" class="title" text-anchor="middle" font-size="22">Gemini-2.0 Flash</text>
+<text x="500" y="460" class="text" text-anchor="middle">Personality Fusion (Ego × Ayanokoji × Johan × Tokuchi)</text>
+
+
+<!-- SCORING ENGINE -->
+<rect x="100" y="540" width="320" height="160" class="box"/>
+<text x="260" y="590" class="title" text-anchor="middle" font-size="22">Mindset Scoring Engine</text>
+<text x="260" y="630" class="text" text-anchor="middle">Discipline • Consistency • Ego Strength</text>
+<text x="260" y="660" class="text" text-anchor="middle">Adaptability • Execution • Clarity</text>
+
+
+<!-- APEX ENGINE -->
+<rect x="580" y="540" width="320" height="160" class="box"/>
+<text x="740" y="590" class="title" text-anchor="middle" font-size="22">Apex Engine</text>
+<text x="740" y="630" class="text" text-anchor="middle">Dominance Index • Modes</text>
+<text x="740" y="660" class="text" text-anchor="middle">Focus Arcs • Momentum Tracking</text>
+
+
+<!-- UI -->
+<rect x="350" y="700" width="300" height="60" class="box"/>
+<text x="500" y="737" class="text" text-anchor="middle">Streamlit UI</text>
+
+
+
+
+<!-- ARROWS -->
+<line x1="500" y1="180" x2="500" y2="220" class="arrow"/>
+<line x1="500" y1="340" x2="500" y2="380" class="arrow"/>
+<line x1="500" y1="500" x2="260" y2="540" class="arrow"/>
+<line x1="500" y1="500" x2="740" y2="540" class="arrow"/>
+<line x1="260" y1="700" x2="500" y2="700" class="arrow"/>
+<line x1="740" y1="700" x2="500" y2="700" class="arrow"/>
+
+</svg>
