@@ -2,8 +2,10 @@ from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+import streamlit as st
+
+API_KEY = st.secrets["GEMINI_API_KEY"]
+
 
 
 # Initialize Gemini Flash 2.0

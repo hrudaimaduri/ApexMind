@@ -16,8 +16,10 @@ from sentence_transformers import SentenceTransformer
 #           LOAD ENVIRONMENT
 # ======================================
 
-load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
+import streamlit as st
+
+API_KEY = st.secrets["GEMINI_API_KEY"]
+
 
 if not API_KEY:
     print("⚠ INFO: GEMINI_API_KEY missing — embeddings do NOT use Gemini.")

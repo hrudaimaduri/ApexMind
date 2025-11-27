@@ -13,8 +13,10 @@ import json
 # ------------------------------
 BASE_DIR = Path(__file__).resolve().parent
 
-load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
+import streamlit as st
+
+API_KEY = st.secrets["GEMINI_API_KEY"]
+
 
 if not API_KEY:
     raise ValueError("❌ Missing GEMINI_API_KEY in .env for scoring_engine")
