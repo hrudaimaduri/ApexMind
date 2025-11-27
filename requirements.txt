@@ -1,5 +1,8 @@
-#python-dotenv
-#google-generativeai
-#langchain
-#langchain-core
-#tiktoken
+streamlit
+python-dotenv
+google-generativeai
+faiss-cpu
+sentence-transformers
+torch
+numpy
+pandas
