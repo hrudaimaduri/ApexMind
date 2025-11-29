@@ -2,7 +2,6 @@
 
 import streamlit as st
 import pandas as pd
-import time
 import html
 from typing import List, Dict, Any
 
@@ -22,7 +21,8 @@ st.set_page_config(
 # ==========================================================
 # GLOBAL CSS — NEON + GLASS + PREMIUM THEME
 # ==========================================================
-st.markdown("""
+st.markdown(
+    """
 <style>
 
 html, body, [class*="css"] {
@@ -120,7 +120,9 @@ html, body, [class*="css"] {
 }
 
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ==========================================================
@@ -142,14 +144,17 @@ if "last_query_context" not in st.session_state:
 # ==========================================================
 # HEADER
 # ==========================================================
-st.markdown("""
+st.markdown(
+    """
 <div style="padding: 12px 0px 8px 0px;">
     <div class="neon-title">🧠 ApexMind</div>
     <p style="font-size: 1.12rem; opacity: 0.82; margin-top: 4px;">
         Hybrid RAG × Psychological Profiling × Apex Performance Engine
     </p>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ==========================================================
@@ -177,18 +182,27 @@ col_chat, col_right = st.columns([1.8, 1.2])
 
 
 # ==========================================================
-# CHAT COLUMN
+# CHAT COLUMN (LEFT)
 # ==========================================================
 with col_chat:
-
-    st.markdown("<div class='section-header'>💬 Mindset Coaching Chat</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='section-header'>💬 Mindset Coaching Chat</div>",
+        unsafe_allow_html=True,
+    )
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
 
+    # Chat history
     for msg in st.session_state.chat:
         if msg["role"] == "user":
-            st.markdown(f"<div class='user-msg'>🧍 <b>You:</b> {msg['content']}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div class='user-msg'>🧍 <b>You:</b> {msg['content']}</div>",
+                unsafe_allow_html=True,
+            )
         else:
-            st.markdown(f"<div class='agent-msg'>🤖 <b>Agent:</b> {msg['content']}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div class='agent-msg'>🤖 <b>Agent:</b> {msg['content']}</div>",
+                unsafe_allow_html=True,
+            )
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -196,14 +210,17 @@ with col_chat:
     user_input = st.text_area(
         "",
         height=120,
-        placeholder="Example: This week I coded 5 days, 3 hours each..."
+        placeholder="Example: This week I coded 5 days, 3 hours each...",
     )
 
     ask = st.button("🚀 Ask ApexMind")
 
     if ask and user_input.strip():
         with st.spinner("Analyzing mindset + retrieving knowledge..."):
+            # RAG context (for analysis zone)
             st.session_state.last_query_context = retrieve_context(user_input, k=5)
+
+            # Main agent response (RAG + scoring + apex)
             result = ask_agent(user_id, user_input)
 
         # Save conversation
@@ -214,52 +231,61 @@ with col_chat:
         st.session_state.scores_history.append(result["scores"])
         st.session_state.apex_history.append(result["apex"])
 
-        st.success("Generated! Scroll to view analysis.")
+        st.success("Response generated! Scroll down to view analysis.")
 
 
 # ==========================================================
-# METRICS COLUMN
+# METRICS + APEX COLUMN (RIGHT)
 # ==========================================================
-with col_chat:
-    st.markdown("<div class='section-header'>💬 Mindset Coaching Chat</div>", unsafe_allow_html=True)
+with col_right:
+    # Mindset Metrics
+    st.markdown(
+        "<div class='section-header'>📊 Mindset Metrics</div>",
+        unsafe_allow_html=True,
+    )
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
 
-    # Show chat history
-    for msg in st.session_state.chat:
-        if msg["role"] == "user":
-            st.markdown(f"<div class='user-msg'>🧍 <b>You:</b> {msg['content']}</div>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<div class='agent-msg'>🤖 <b>Agent:</b> {msg['content']}</div>", unsafe_allow_html=True)
+    if st.session_state.scores_history:
+        latest_scores = st.session_state.scores_history[-1]
+        scores_df = (
+            pd.DataFrame(latest_scores.items(), columns=["Trait", "Score"])
+            .set_index("Trait")
+        )
+        st.dataframe(scores_df, use_container_width=True)
+        st.bar_chart(scores_df)
+    else:
+        st.info("Metrics will appear after your first interaction.")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("### Enter your weekly report or question")
-
-    user_input = st.text_area(
-        "",
-        key="user_text",
-        height=120,
-        placeholder="Example: This week I coded 5 days..."
+    # Apex State
+    st.markdown(
+        "<div class='section-header'>🧠 Apex State</div>",
+        unsafe_allow_html=True,
     )
+    st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
 
-    if st.button("🚀 Ask ApexMind", key="ask_button"):
-        if user_input.strip():
-            with st.spinner("Analyzing..."):
-                try:
-                    context_docs = retrieve_context(user_input, k=5)
-                    st.session_state.last_query_context = context_docs
+    if st.session_state.apex_history:
+        apex = st.session_state.apex_history[-1]
 
-                    result = ask_agent(user_id=user_id, query=user_input)
+        modes = apex.get("modes", [])
+        if modes:
+            st.markdown("**Active Modes:**")
+            badges = " ".join(
+                f"<span style='padding:4px 10px; border-radius:999px; "
+                f"background:rgba(127,90,240,0.2); "
+                f"border:1px solid rgba(127,90,240,0.6); margin-right:6px; "
+                f"font-size:12px;'>{m}</span>"
+                for m in modes
+            )
+            st.markdown(badges, unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
 
-                    st.session_state.chat.append({"role": "user", "content": user_input})
-                    st.session_state.chat.append({"role": "agent", "content": result["answer"]})
+        st.json(apex)
+    else:
+        st.info("Apex Engine will activate after your first session.")
 
-                    st.session_state.scores_history.append(result["scores"])
-                    st.session_state.apex_history.append(result["apex"])
-
-                    st.success("Response generated!")
-                except Exception as e:
-                    st.error(f"❌ Backend Error: {e}")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ==========================================================
@@ -271,7 +297,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown("""
+st.markdown(
+    """
 <div style="
     background: rgba(255,255,255,0.04);
     padding: 25px;
@@ -280,22 +307,23 @@ st.markdown("""
     backdrop-filter: blur(10px);
     margin-top: 6px;
     margin-bottom: 25px;">
-""", unsafe_allow_html=True)
-
+""",
+    unsafe_allow_html=True,
+)
 
 if st.session_state.last_query_context:
-
     st.markdown("## 🔍 Top Retrieved Knowledge Chunks")
 
     for i, doc in enumerate(st.session_state.last_query_context, start=1):
-
         score = float(doc["score"])
         heat = max(0.0, min(score, 1.0))
         bar_color = f"rgba(127, 90, 240, {0.35 + heat/2})"
 
+        # Sanitize content so HTML doesn't leak
         safe_text = html.escape(doc["content"]).replace("\\n", "\n")
 
-        st.markdown(f"""
+        st.markdown(
+            f"""
         <div style="
             padding: 16px;
             margin-bottom: 15px;
@@ -335,11 +363,11 @@ if st.session_state.last_query_context:
             </details>
 
         </div>
-        """, unsafe_allow_html=True)
-
+        """,
+            unsafe_allow_html=True,
+        )
 
     st.markdown("<hr class='custom-divider'>", unsafe_allow_html=True)
-
 
     # Reasoning Trace
     st.markdown("## 🧩 Reasoning Trace — How ApexMind Used These Chunks")
@@ -363,7 +391,8 @@ The model blends:
 This produces a tailored, evolving coaching strategy.
 """
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div style="
         padding:18px;
         border-radius:12px;
@@ -372,8 +401,9 @@ This produces a tailored, evolving coaching strategy.
     ">
         <pre style="white-space:pre-wrap; font-size:14px; opacity:0.9;">{reasoning}</pre>
     </div>
-    """, unsafe_allow_html=True)
-
+    """,
+        unsafe_allow_html=True,
+    )
 else:
     st.info("Ask a question above to reveal RAG context and reasoning.")
 
