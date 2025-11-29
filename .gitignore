@@ -2,10 +2,10 @@
 venv/
 .env
 
-# Ignore FAISS index
-faiss_index.bin
-faiss_index.fdx
-faiss_index.json
+# REMOVE FAISS IGNORE (We WANT these files)
+# faiss_index.bin
+# faiss_index.fdx
+# faiss_index.json
 
 # User data history
 user_data/
